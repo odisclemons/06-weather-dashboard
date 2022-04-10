@@ -20,11 +20,10 @@
         </header>
 
         <main class="row">
-            <div id="search-col" class="col-4" style="background: #eee; height: 20rem;">
+            <div id="search-col" class="col-4">
                 <h2>Search for a city:</h2>
                 <input id="search" placeholder="e.g.: San Diego"></input>
-                <button type="button" class="btn btn-sm btn-primary"
-                    style="background: --searchBtnColor">Search</button>
+                <button type="button" class="btn btn-sm" style="background: var(--searchBtnColor)">Search</button>
                 <hr>
                 <!-- city buttons will be generated here -->
 
@@ -38,8 +37,10 @@
                     <p>UV Index: <span id="uv"></span></p>
                 </div>
 
-                <div id="forecast">
+                <div id="forecast-box">
                     <h5>5-Day Forecast:</h5>
+                    <div class="forecast-card"></div>
+                    <div class="forecast-card"></div>
                     <div class="forecast-card"></div>
                     <div class="forecast-card"></div>
                 </div>
