@@ -1,0 +1,15 @@
+:root {
+  --cardColor: #33475a;
+  --searchBtnColor: #5aa2e9;
+}
+
+.main-header {
+  text-align: center;
+  color: white;
+  background: linear-gradient(to right, #3b6ec4, #230455);
+}
+
+.main-header h1 {
+  margin: 1rem;
+  font-weight: bold;
+}
