@@ -20,8 +20,13 @@
         </header>
 
         <main class="row">
-            <div class="col-4" style="background: gray; height: 20rem;">
+            <div id="search-col" class="col-4" style="background: #eee; height: 20rem;">
                 <h2>Search for a city:</h2>
+                <input id="search" placeholder="e.g.: San Diego"></input>
+                <button type="button" class="btn btn-sm btn-primary"
+                    style="background: --searchBtnColor">Search</button>
+                <hr>
+                <!-- city buttons will be generated here -->
 
             </div>
             <div class="col-8" style="background: #ddd; height: 20rem;">
