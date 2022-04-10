@@ -23,3 +23,27 @@
   background: gray;
   color: #111;
 }
+
+#city-box {
+  border: 1px solid black;
+  padding: 0.25rem;
+}
+
+#forecast {
+  background: #ddd;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#forecast h5 {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.forecast-card {
+  height: 25rem;
+  width: 49%;
+  background-color: var(--cardColor);
+  margin-bottom: 1rem 0;
+}
