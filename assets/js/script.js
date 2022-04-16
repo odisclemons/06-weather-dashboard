@@ -131,6 +131,8 @@ function getCoordinates() {
 }
 
 function render5Day(daily) {
+  //clear out any previous forecast first
+  forecastCardContainer.html(null)
   for (var i = 0; i < 5; i++) {
     let { weather, temp, humidity, wind_speed, dt } = daily[i]
     let newForeCastCard = `
