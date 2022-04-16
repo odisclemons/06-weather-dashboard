@@ -4,6 +4,8 @@ var city = "orlando"
 var curDt = moment().format("M/DD/YYYY")
 var cityName = $('#city-name')
 
+var forecastCardContainer = $('#forecast-card-container')
+
 var city = ""
 var dt = $('#dt')
 var weatherIcon = $('#weather-icon')
@@ -49,7 +51,6 @@ function handleWeatherQuery(e) {
   getCoordinates().then(coords => {
     let { lat, lon, name } = coords
     let query = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&units=imperial&appid=${apiKey}`
-    //let query = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`
     console.log(name)
     city = name
     return fetch(query)
@@ -70,6 +71,7 @@ function handleWeatherQuery(e) {
       weatherIcon.html(`<img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />`)
 
       updateLocalStorage(city)
+      render5Day(data.daily)
     })
 }
 
@@ -125,4 +127,21 @@ function getCoordinates() {
       console.log(data[0]);
       return { lat, lon, name }
     })
+}
+
+function render5Day(daily) {
+  for (var i = 0; i < 5; i++) {
+    let { weather, temp, humidity, wind_speed } = daily[i]
+    let newForeCastCard = `
+<div class="forecast-card">
+    <h5>${curDt}</h5>
+    <img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />
+    <p>Temp: ${temp.day}°F</p>
+    <p>Wind: ${wind_speed}MPH</p>
+    <p>Humidity: ${humidity}</p>
+</div>
+`
+
+    forecastCardContainer.append(newForeCastCard)
+  }
 }

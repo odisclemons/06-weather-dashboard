@@ -34,7 +34,7 @@
   padding: 0.25rem;
 }
 
-#forecast-box {
+#forecast-card-container {
   /* background: #ddd; */
   display: flex;
   flex-wrap: wrap;
@@ -47,8 +47,14 @@
 }
 
 .forecast-card {
-  height: 25rem;
+  height: 15rem;
   width: 15rem;
   background-color: var(--cardColor);
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: .5rem;
+  color: white;
 }
