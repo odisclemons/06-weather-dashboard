@@ -10,6 +10,7 @@ var weatherIcon = $('#weather-icon')
 
 var inpSearch = $('#inp-search')
 var btnSearch = $('#btn-search')
+var btnClear = $('#btn-clear')
 
 var spnTemp = $('#spn-temp')
 var spnWind = $('#spn-wind')
@@ -29,6 +30,9 @@ $(() => {
 
   //click handler for search button click
   btnSearch.click(handleWeatherQuery)
+
+  // clear local storage
+  btnClear.click(handleClearButtons)
 })
 
 function handleWeatherQuery(e) {
@@ -43,24 +47,22 @@ function handleWeatherQuery(e) {
 
   //lets run the query and see what happens...
   getCoordinates().then(coords => {
-    let { lat, lon } = coords
-    let query = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=${apiKey}`
+    let { lat, lon, name } = coords
+    let query = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&units=imperial&appid=${apiKey}`
     //let query = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`
-
-    // "lat": 40.735657,
-    //     "lon": -74.1723667,
+    console.log(name)
+    city = name
     return fetch(query)
   })
     .then((res) => res.json()).then(data => {
-      console.log(data)
-      //get the keys we need from it
-      let { coord, weather, main, wind, name } = data
+      console.log(city)
+      //first take the current forcast for today
+      let { temp, wind_speed, humidity, uvi, weather } = data.current
 
-      city = name
-      spnTemp.text(`${main.temp}°F`)
-      spnWind.text(`${wind.speed} MPH`)
-      spnHumidity.text(`${main.humidity}%`)
-      spnUv.text()
+      spnTemp.text(`${temp}°F`)
+      spnWind.text(`${wind_speed} MPH`)
+      spnHumidity.text(`${humidity}%`)
+      spnUv.text(uvi)
 
       // set the city name and date at the top of page
       cityName.text(city)
@@ -79,6 +81,12 @@ function updateLocalStorage(newCity) {
     renderButtons()
   }
 
+}
+
+// clear buttons
+function handleClearButtons() {
+  localStorage.clear('wdbCities')
+  renderButtons()
 }
 
 // make the buttons under search that show the recently search cities
@@ -113,8 +121,8 @@ function getCoordinates() {
   let coordsUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
   return fetch(coordsUrl)
     .then(response => response.json()).then(data => {
-      let { lat, lon } = data[0]
+      let { lat, lon, name } = data[0]
       console.log(data[0]);
-      return { lat, lon }
+      return { lat, lon, name }
     })
 }
