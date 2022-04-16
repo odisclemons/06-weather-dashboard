@@ -69,7 +69,7 @@ function handleWeatherQuery(e) {
       // set the city name and date at the top of page
       cityName.text(city)
       dtText.text(`(${curDt})`)
-      weatherIcon.html(`<img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />`)
+      weatherIcon.html(`<img src="https://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />`)
 
       updateLocalStorage(city)
       render5Day(data.daily)
@@ -121,7 +121,7 @@ function handleCityClick(newCity) {
 }
 
 function getCoordinates() {
-  let coordsUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
+  let coordsUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
   return fetch(coordsUrl)
     .then(response => response.json()).then(data => {
       let { lat, lon, name, dt } = data[0]
@@ -136,7 +136,7 @@ function render5Day(daily) {
     let newForeCastCard = `
         <div class="forecast-card">
             <h5>${moment().add(i + 1, 'day').format("M/DD/YYYY")}</h5>
-            <img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />
+            <img src="https://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />
             <p>Temp: ${temp.day}° F</p>
             <p>Wind: ${wind_speed} MPH</p>
             <p>Humidity: ${humidity}%</p>
