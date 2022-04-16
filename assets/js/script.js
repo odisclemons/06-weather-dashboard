@@ -40,27 +40,35 @@ function handleWeatherQuery(e) {
     return
   }
 
-  let query = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`
 
   //lets run the query and see what happens...
-  fetch(query).then((res) => res.json()).then(data => {
-    console.log(data)
-    //get the keys we need from it
-    let { coord, weather, main, wind, name } = data
+  getCoordinates().then(coords => {
+    let { lat, lon } = coords
+    let query = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=${apiKey}`
+    //let query = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`
 
-    city = name
-    spnTemp.text(`${main.temp}°F`)
-    spnWind.text(`${wind.speed} MPH`)
-    spnHumidity.text(`${main.humidity}%`)
-    spnUv.text()
-
-    // set the city name and date at the top of page
-    cityName.text(city)
-    dt.text(`(${curDt})`)
-    weatherIcon.html(`<img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />`)
-
-    updateLocalStorage(city)
+    // "lat": 40.735657,
+    //     "lon": -74.1723667,
+    return fetch(query)
   })
+    .then((res) => res.json()).then(data => {
+      console.log(data)
+      //get the keys we need from it
+      let { coord, weather, main, wind, name } = data
+
+      city = name
+      spnTemp.text(`${main.temp}°F`)
+      spnWind.text(`${wind.speed} MPH`)
+      spnHumidity.text(`${main.humidity}%`)
+      spnUv.text()
+
+      // set the city name and date at the top of page
+      cityName.text(city)
+      dt.text(`(${curDt})`)
+      weatherIcon.html(`<img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />`)
+
+      updateLocalStorage(city)
+    })
 }
 
 function updateLocalStorage(newCity) {
@@ -93,8 +101,20 @@ function renderButtons() {
 }
 
 function handleCityClick(newCity) {
-  console.log('newCity:', newCity)
   city = newCity
   inpSearch.value = newCity
+
+  // normally this would have a click event so I pass that object with an empty method
+  // to make sure it doesnt err out
   handleWeatherQuery({ preventDefault: () => { } })
+}
+
+function getCoordinates() {
+  let coordsUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
+  return fetch(coordsUrl)
+    .then(response => response.json()).then(data => {
+      let { lat, lon } = data[0]
+      console.log(data[0]);
+      return { lat, lon }
+    })
 }
