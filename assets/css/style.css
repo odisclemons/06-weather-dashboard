@@ -43,7 +43,7 @@
 
 .forecast-card {
   height: 25rem;
-  width: 49%;
+  width: 15rem;
   background-color: var(--cardColor);
   margin-bottom: 1rem;
 }
