@@ -15,7 +15,7 @@ var spnUv = $('#spn-uv')
 var storedCities = localStorage.getItem('wdbCities')
 
 // if there is stuff there, stringify it or just set it to an empty array
-var cities = storedCities?.length > 0 ? JSON.stringify(storedCities) : [];
+var cities = storedCities?.length > 0 ? JSON.parse(storedCities) : [];
 
 // when document is ready, do this stuff...
 $(() => {
@@ -32,7 +32,7 @@ $(() => {
 function handleWeatherQuery(e) {
   e.preventDefault()
   if (inpSearch[0].value) city = inpSearch[0].value
-  console.log(city)
+  console.log(cities)
   if (!city) {
     alert("Please specify a location first...")
     return
@@ -69,13 +69,26 @@ function updateLocalStorage(newCity) {
 // make the buttons under search that show the recently search cities
 // we only add cities that successfully return results from api
 function renderButtons() {
+
+  console.log('render cities', cities)
 //first clear the buttons that are already there
 buttonContainer.html(null)
 
+if(!cities ?? !cities.length){
+  buttonContainer.html('<h2>There are no recent cities yet...</h2>')
+  return
+}
   //loop through cities list and make a button for each one
   cities.map((city) => {
     console.log(city)
-    let cityButton = `<button type="button" class="btn btn-sm btn-city">${city}</button>`;
+    let cityButton = `<button type="button" class="btn btn-sm btn-city" onclick="handleCityClick('${city}')">${city}</button>`;
     buttonContainer.append(cityButton);
   });
+}
+
+function handleCityClick(newCity){
+  console.log('newCity:', newCity)
+  city = newCity
+  inpSearch.value = newCity
+  handleWeatherQuery({ preventDefault: ()=>{}})
 }
