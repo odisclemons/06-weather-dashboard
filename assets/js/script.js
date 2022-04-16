@@ -1,4 +1,9 @@
 var searchCol = $("#search-col");
+var apiKey = "2bdae6894825c3874876330aedc1f2a6";
+var city = "Orlando" || "Search for a city..."
+var dt = moment().format("M/DD/YYYY")
+var cityNameDate = $('#city-name-date');
+
 var cities = [
   "Austin",
   "Chicago",
@@ -9,11 +14,13 @@ var cities = [
   "Denver",
 ];
 
-function init() {
+$(()=>{
   cities.map((city) => {
     let cityButton = `<button type="button" class="btn btn-sm btn-city">${city}</button>`;
     searchCol.append(cityButton);
   });
-}
 
-init();
+  console.log(cityNameDate)
+
+  cityNameDate.text(`${city} (${dt})`)
+})
