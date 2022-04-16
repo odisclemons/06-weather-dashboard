@@ -7,7 +7,7 @@ var cityName = $('#city-name')
 var forecastCardContainer = $('#forecast-card-container')
 
 var city = ""
-var dt = $('#dt')
+var dtText = $('#dt-text')
 var weatherIcon = $('#weather-icon')
 
 var inpSearch = $('#inp-search')
@@ -56,7 +56,6 @@ function handleWeatherQuery(e) {
     return fetch(query)
   })
     .then((res) => res.json()).then(data => {
-      console.log(city)
       //first take the current forcast for today
       let { temp, wind_speed, humidity, uvi, weather } = data.current
 
@@ -65,9 +64,11 @@ function handleWeatherQuery(e) {
       spnHumidity.text(`${humidity}%`)
       spnUv.text(uvi)
 
+      setUviColor(uvi)
+
       // set the city name and date at the top of page
       cityName.text(city)
-      dt.text(`(${curDt})`)
+      dtText.text(`(${curDt})`)
       weatherIcon.html(`<img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />`)
 
       updateLocalStorage(city)
@@ -123,7 +124,7 @@ function getCoordinates() {
   let coordsUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`
   return fetch(coordsUrl)
     .then(response => response.json()).then(data => {
-      let { lat, lon, name } = data[0]
+      let { lat, lon, name, dt } = data[0]
       console.log(data[0]);
       return { lat, lon, name }
     })
@@ -131,17 +132,38 @@ function getCoordinates() {
 
 function render5Day(daily) {
   for (var i = 0; i < 5; i++) {
-    let { weather, temp, humidity, wind_speed } = daily[i]
+    let { weather, temp, humidity, wind_speed, dt } = daily[i]
     let newForeCastCard = `
-<div class="forecast-card">
-    <h5>${curDt}</h5>
-    <img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />
-    <p>Temp: ${temp.day}°F</p>
-    <p>Wind: ${wind_speed}MPH</p>
-    <p>Humidity: ${humidity}</p>
-</div>
-`
+        <div class="forecast-card">
+            <h5>${moment().add(i + 1, 'day').format("M/DD/YYYY")}</h5>
+            <img src="http://openweathermap.org/img/wn/${weather[0].icon}.png" alt="weather icon" />
+            <p>Temp: ${temp.day}° F</p>
+            <p>Wind: ${wind_speed} MPH</p>
+            <p>Humidity: ${humidity}%</p>
+        </div>
+        `
 
     forecastCardContainer.append(newForeCastCard)
+  }
+}
+
+//change background color of UV Index based on uvi
+function setUviColor(uvi) {
+
+  switch (true) {
+    case uvi <= 2:
+      spnUv.css({ 'background-color': 'green', "color": "white" })
+      break;
+    case (uvi > 2 && uvi < 6):
+      spnUv.css({ "background-color": "yellow", "color": "black" })
+      break;
+    case (uvi >= 6 && uvi < 8):
+      spnUv.css({ "background-color": "orange", "color": "white" })
+      break;
+    case (uvi >= 8):
+      spnUv.css({ "background-color": "red", "color": "white" })
+      break;
+    default:
+      spnUv.css({ "background-color": "white", "color": "black", "border-color": "black" })
   }
 }
